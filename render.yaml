@@ -18,6 +18,6 @@ services:
       - key: META_REDIRECT_URI
         sync: false
       - key: META_GRAPH_VERSION
-        value: v25.0
+        value: v27.0
       - key: SESSION_SECRET
         generateValue: true
