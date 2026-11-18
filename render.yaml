@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: instagram-ai-control
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: APP_ENV
+        value: production
+      - key: META_INSTAGRAM_APP_ID
+        sync: false
+      - key: META_INSTAGRAM_APP_SECRET
+        sync: false
+      - key: META_REDIRECT_URI
+        sync: false
+      - key: META_GRAPH_VERSION
+        value: v25.0
+      - key: SESSION_SECRET
+        generateValue: true
