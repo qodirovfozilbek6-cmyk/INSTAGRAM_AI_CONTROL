@@ -6,6 +6,12 @@
   <meta name="theme-color" content="#090b12">
   <title>Instagram AI Control</title>
   <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .action{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 17px;border:1px solid #8067ff;background:linear-gradient(120deg,#795cff,#4d3db5);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;cursor:pointer;font:inherit}
+    .action.secondary{background:#171a27;border-color:#30364a}.action.danger{background:#321c27;border-color:#6d3449}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.profile-row{display:flex;align-items:center;gap:14px}.profile-pic{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#29263c}.profile-name{font-size:19px;font-weight:750}.muted{color:#9699ad}.notice{margin:16px 0;padding:13px 16px;border-radius:12px;background:#191b2a;color:#c7c4e8}.notice.error{background:#321c27;color:#ffb9c8}.hidden{display:none!important}
+    .live-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}.metric{padding:18px;background:#111522;border:1px solid #252b3c;border-radius:15px}.metric strong{display:block;font-size:25px;margin-top:8px}.media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.media-item{overflow:hidden;background:#111522;border:1px solid #252b3c;border-radius:14px}.media-item img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}.media-item p{padding:10px;margin:0;font-size:12px;color:#c6c8d4}.section-panel{margin-top:26px}.section-panel h3{margin-bottom:10px}.section-panel textarea{width:100%;min-height:90px;padding:13px;background:#111522;color:#fff;border:1px solid #30364a;border-radius:12px;font:inherit}.post-link{color:#c5b9ff;text-decoration:none}.small{font-size:12px}@media(max-width:700px){.live-grid,.media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  </style>
 </head>
 <body>
   <div class="shell">
@@ -13,30 +19,34 @@
       <a class="brand" href="/"><span class="brand-mark">◎</span><span>INSTAGRAM <b>AI</b><small>CONTROL CENTER</small></span></a>
       <div class="side-label">WORKSPACE</div>
       <a class="nav active" href="#overview">▦ <span>Overview</span></a>
-      <a class="nav" href="#analytics">◷ <span>Analytics</span><em>Soon</em></a>
-      <a class="nav" href="#content">▤ <span>Content planner</span><em>Soon</em></a>
-      <a class="nav" href="#inbox">✉ <span>Inbox</span><em>Soon</em></a>
-      <a class="nav" href="#assistant">✧ <span>AI assistant</span><em>Soon</em></a>
-      <div class="sidebar-bottom"><span class="live-dot"></span> Secure workspace <small>v0.1.0</small></div>
+      <a class="nav" href="#analytics">◷ <span>Analytics</span></a>
+      <a class="nav" href="#content">▤ <span>Content studio</span></a>
+      <a class="nav" href="#inbox">✉ <span>Inbox</span><em>Later</em></a>
+      <a class="nav" href="#assistant">✧ <span>AI assistant</span></a>
+      <div class="sidebar-bottom"><span class="live-dot"></span> Secure workspace <small>v0.2.0</small></div>
     </aside>
     <main class="main" id="overview">
       <header class="topbar"><div><div class="eyebrow">CREATOR WORKSPACE / OVERVIEW</div><h1>Control center</h1></div><div class="avatar">IA</div></header>
-      <section class="welcome"><div><div class="eyebrow">YOUR CREATOR SPACE</div><h2>Instagram boshqaruvi,<br><span>bitta markazda.</span></h2><p>Profil, kontent va auditoriya ko‘rsatkichlarini rasmiy Meta API orqali boshqarish uchun yagona panel.</p></div><div class="orbit"><div class="orbit-core">◎</div><i></i><b></b></div></section>
-      <section class="section-head"><div><div class="eyebrow">SYSTEM STATUS</div><h3>Ulanish holati</h3></div><span class="pill pending"><i></i> Setup required</span></section>
+      <section class="welcome"><div><div class="eyebrow">YOUR CREATOR SPACE</div><h2>Instagram boshqaruvi,<br><span>bitta markazda.</span></h2><p>Profil va kontentni rasmiy Meta API orqali boshqarish uchun yagona panel.</p><div class="toolbar"><a class="action" id="connect-btn" href="/auth/instagram">◎ Instagram’ni ulash</a><button class="action secondary hidden" id="refresh-btn">↻ Yangilash</button><button class="action danger hidden" id="disconnect-btn">Uzish</button></div></div><div class="orbit"><div class="orbit-core">◎</div><i></i><b></b></div></section>
+      <div id="notice" class="notice hidden" role="status"></div>
+      <section class="section-head"><div><div class="eyebrow">ACCOUNT STATUS</div><h3>Akkaunt holati</h3></div><span class="pill pending" id="status-pill"><i></i> Setup required</span></section>
       <section class="status-grid">
-        <article class="status-card"><div class="card-icon purple">◎</div><div class="card-title">Instagram account</div><strong id="connection">Not connected</strong><small>Creator account supported</small></article>
+        <article class="status-card"><div class="card-icon purple">◎</div><div class="card-title">Instagram account</div><strong id="connection">Not connected</strong><small id="username-label">Creator account supported</small></article>
         <article class="status-card"><div class="card-icon blue">⌘</div><div class="card-title">Meta developer app</div><strong id="meta-status">Not configured</strong><small>OAuth credentials required</small></article>
-        <article class="status-card"><div class="card-icon gold">◈</div><div class="card-title">API connection</div><strong id="api-version">v25.0</strong><small>Official Instagram Platform</small></article>
+        <article class="status-card"><div class="card-icon gold">◈</div><div class="card-title">API connection</div><strong id="api-version">v27.0</strong><small>Official Instagram Platform</small></article>
       </section>
-      <section class="setup-card"><div class="setup-copy"><div class="eyebrow">NEXT STEP</div><h3>Avval Meta ilovasini ulaymiz</h3><p>Instagram Login orqali Creator akkauntingizga ruxsat beriladi. Parolni bu saytga kiritmaysiz — tasdiqlash Meta sahifasida amalga oshadi.</p><a class="text-link" href="https://developers.facebook.com/" target="_blank" rel="noreferrer">Meta for Developers <span>↗</span></a></div><div class="setup-number">01</div></section>
-      <section class="section-head modules-head"><div><div class="eyebrow">PLATFORM MODULES</div><h3>Modullar</h3></div></section>
-      <section class="module-grid">
-        <article class="module"><span>◷</span><h4>Analytics</h4><p>Reach, views va engagement statistikasi.</p><label>PLANNED</label></article>
-        <article class="module"><span>▤</span><h4>Content planner</h4><p>Post va Reels uchun rejalashtirish.</p><label>PLANNED</label></article>
-        <article class="module"><span>✉</span><h4>Inbox manager</h4><p>Ruxsat berilgan xabarlarni boshqarish.</p><label>PLANNED</label></article>
-        <article class="module"><span>✧</span><h4>AI assistant</h4><p>Caption, g‘oya va kontent tahlili.</p><label>PLANNED</label></article>
+      <section id="profile-panel" class="section-panel hidden">
+        <div class="section-head"><div><div class="eyebrow">CONNECTED ACCOUNT</div><h3>Profil ma’lumotlari</h3></div></div>
+        <article class="status-card"><div class="profile-row"><img id="profile-pic" class="profile-pic" alt="Instagram profile"><div><div class="profile-name" id="profile-name">—</div><div class="muted" id="profile-type">—</div></div></div>
+          <div class="live-grid"><div class="metric"><span class="muted">Postlar</span><strong id="media-count">—</strong></div><div class="metric"><span class="muted">Akkaunt turi</span><strong id="account-type">—</strong></div><div class="metric"><span class="muted">Ulanish</span><strong>Faol</strong></div></div>
+          <a class="post-link" id="profile-link" href="#" target="_blank" rel="noreferrer">Instagram profilini ochish ↗</a>
+        </article>
       </section>
-      <footer>Instagram AI Control <span>Built with official Meta APIs · No password collection</span></footer>
+      <section id="analytics" class="section-panel hidden"><div class="section-head"><div><div class="eyebrow">PERFORMANCE</div><h3>Insights</h3></div></div><div id="insights-result" class="status-card">Insights ma’lumotlari yuklanmoqda…</div></section>
+      <section id="content" class="section-panel"><div class="section-head"><div><div class="eyebrow">RECENT CONTENT</div><h3>So‘nggi postlar</h3></div></div><div id="media-grid" class="media-grid"><div class="muted">Instagram ulangandan keyin postlar shu yerda ko‘rinadi.</div></div></section>
+      <section id="assistant" class="section-panel"><div class="section-head"><div><div class="eyebrow">CREATOR TOOLS</div><h3>Caption yordamchisi</h3></div></div><div class="status-card"><p class="muted">Mavzu yozing — panel sizga tahrirlash uchun caption loyihasini tuzadi. Bu hozircha lokal yordamchi, tashqi AI xizmati ulanmagan.</p><textarea id="caption-topic" placeholder="Masalan: yangi loyiha taqdimoti..."></textarea><div class="toolbar"><button class="action" id="caption-btn">Caption yaratish</button><button class="action secondary" id="copy-caption">Nusxalash</button></div><textarea id="caption-output" placeholder="Caption loyihasi shu yerda chiqadi..." readonly></textarea></div></section>
+      <section id="inbox" class="section-panel"><div class="section-head"><div><div class="eyebrow">MESSAGING</div><h3>Inbox</h3></div></div><div class="status-card muted">Xabarlar moduli alohida Meta ruxsati va webhook sozlamalarini talab qiladi. Hozircha faollashtirilmagan.</div></section>
+      <footer>Instagram AI Control <span>Official Meta APIs · Token encrypted at rest</span></footer>
     </main>
   </div>
   <script src="/static/app.js"></script>
